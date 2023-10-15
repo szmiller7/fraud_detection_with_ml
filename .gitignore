@@ -9,6 +9,9 @@ __pycache__/
 # C extensions
 *.so
 
+# file
+fraud_data/
+
 # Distribution / packaging
 .Python
 build/
@@ -123,6 +126,7 @@ celerybeat.pid
 *.sage.py
 
 # Environments
+.fraud_data
 .env
 .venv
 env/
