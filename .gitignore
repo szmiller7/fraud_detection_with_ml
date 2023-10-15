@@ -127,7 +127,6 @@ celerybeat.pid
 *.sage.py
 
 # Environments
-.fraud_data
 .env
 .venv
 env/
