@@ -5,6 +5,7 @@ from src.logger import logging
 import pandas as pd
 from sklearn.model_selection import train_test_split
 from dataclasses import dataclass
+from data_config import transaction_cols
 
 @dataclass
 class DataReaderConfig:
@@ -35,31 +36,31 @@ class DataReader:
             df = df[na_id_drop]
             logging.info(f"Dropped columns with more than {100*na_perc_drop}% missing values")
 
-
+            # drop transaction id and dt
+            df = df.drop(transaction_cols, axis=1)
+            logging.info(f"Dropped transaction cols {transaction_cols}")
+            
+            # create directory for data save
             os.makedirs(os.path.dirname(self.reader_config.train_data_path), exist_ok=True)
-            
+            # save raw data
             df.to_csv(self.reader_config.raw_data_path,index=False)
-            
+            # split and save train, test data
             logging.info("Initiated train test split")
             train_set, test_set = train_test_split(df, test_size=0.3, random_state=100)
-
             train_set.to_csv(self.reader_config.train_data_path, index=False)
-
             test_set.to_csv(self.reader_config.test_data_path ,index=False)
-
             logging.info("Completed data reading")
 
-            return(
+            return ( 
                 self.reader_config.train_data_path,
-                self.reader_config.test_data_path,
-
+                self.reader_config.test_data_path
             )
         except Exception as e:
             raise CustomException(e, sys)
             
-
+    
 if __name__ == "__main__":
     obj = DataReader()
     obj.initiate_data_reader()
-
+    
 
