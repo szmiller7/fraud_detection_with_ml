@@ -1,5 +1,5 @@
 ########## outcome variable
-outcome_cols = ['isFraud']
+outcome_col = ['isFraud']
 
 ########## transactional info 
 transaction_cols = [
@@ -74,3 +74,7 @@ cat_cols_fillna_unknown = ['ProductCD', 'DeviceType', 'id_28', 'card6', 'id_35',
 ########## recategorisation columns
 cols_browser_recategorize = ['id_31']
 cols_domain_recategorize = ['R_emaildomain', 'P_emaildomain']
+
+########## columns that should be converted to dummy
+# only categorical (ordinal treated as numeric)
+cols_toDummyConvert = ['ProductCD','DeviceType', 'id_28', 'card6', 'id_35', 'id_29', 'card4', 'id_12', 'id_36',  'id_38', 'id_37', 'id_15', 'id_31', 'R_emaildomain',  'P_emaildomain'] 
