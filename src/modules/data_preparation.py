@@ -94,18 +94,7 @@ class DataPreparation:
             X_test[cat_cols_current] = imp_mode.transform(X_test[cat_cols_current])
             logging.info('Imputed categorical variables')
 
-            ##### Encode 
-            # Instantiate the OneHotEncoder with handle_unknown='ignore'
-            encoder = OneHotEncoder(handle_unknown='ignore')
-            # Fit the encoder on the training data and transform both the training and test data
-            X_train_encoded = encoder.fit_transform(X_train[cols_toDummyConvert])
-            X_test_encoded = encoder.transform(X_test[cols_toDummyConvert])
-            # Convert the encoded data back to DataFrames
-            X_train_encoded = pd.DataFrame(X_train_encoded.toarray(), columns=encoder.get_feature_names_out(cols_toDummyConvert), index=X_train.index)
-            X_test_encoded = pd.DataFrame(X_test_encoded.toarray(), columns=encoder.get_feature_names_out(cols_toDummyConvert), index=X_test.index)
-            # Concatenate the encoded data with the original data, and drop the original columns
-            X_train = pd.concat([X_train, X_train_encoded], axis=1).drop(columns=cols_toDummyConvert)
-            X_test = pd.concat([X_test, X_test_encoded], axis=1).drop(columns=cols_toDummyConvert)
+            X_train, X_test = ohe(X_train, X_test, cols_toDummyConvert)
             logging.info("Performed OHE")
 
             # merge into train and test set
@@ -146,6 +135,23 @@ def emaildomain_recategorization(row):
         if category in row_lower:
             return category
     return "other"
+
+def ohe(X_train, X_test, cols_toDummyConvert):
+
+    # Instantiate the OneHotEncoder with handle_unknown='ignore'
+    encoder = OneHotEncoder(handle_unknown='ignore')
+    # Fit the encoder on the training data and transform both the training and test data
+    X_train_encoded = encoder.fit_transform(X_train[cols_toDummyConvert])
+    X_test_encoded = encoder.transform(X_test[cols_toDummyConvert])
+    # Convert the encoded data back to DataFrames
+    X_train_encoded = pd.DataFrame(X_train_encoded.toarray(), columns=encoder.get_feature_names_out(cols_toDummyConvert), index=X_train.index)
+    X_test_encoded = pd.DataFrame(X_test_encoded.toarray(), columns=encoder.get_feature_names_out(cols_toDummyConvert), index=X_test.index)
+    # Concatenate the encoded data with the original data, and drop the original columns
+    X_train = pd.concat([X_train, X_train_encoded], axis=1).drop(columns=cols_toDummyConvert)
+    X_test = pd.concat([X_test, X_test_encoded], axis=1).drop(columns=cols_toDummyConvert)
+
+    return X_train, X_test
+
 
 
 if __name__ == "__main__":
